@@ -1,0 +1,70 @@
+<!-- for display data in ejs -->
+<%= name %>
+<%= class %>
+
+<!-- for comment anything -->
+<%# this is used as comment %>
+
+<!-- for creating variable in ejs -->
+<%= var i=10; %>
+<%= var j=20; %>
+<%= var k=30; %>
+
+<!----for displaying variable in ejs-->
+<%= i %>
+<%= j %>
+
+<!-- if statement explain -->
+<!-- if evaluate a variable,and if that variable is true -->
+<% if(variable){ %>
+.....
+.....
+.....
+<%} %>
+
+<!-- EXAMPLE OF IF -->
+<% if name {%>
+    <h1>Hello<%= name %></h1>
+<% } %>
+
+<!-------loops-------->
+----for
+<% for(initial;condition;incr/decr){%>
+
+<%}%>
+
+<!-----while---------->
+<% while(condition){%>
+<%}%>
+
+<!------forEach------->
+<% data.forEach((item)=>{%>
+<%})%>2
+
+<!------for function call----->
+<% var current= new Date(); %>
+<%= current %>
+<!--------navigation-------->
+<a href="/">Home</a>
+<a href="/about">about</a>
+<a href="/contact">Contact</a>
+
+<!--------for about redirect do this after navigation in about.ejs-->
+const aboutcon(req,res)=>{
+    res.render('about',{'title':'about'})
+    <!-- //for dynamic data {'title':'about'} -->
+}
+
+<!-- partials/include -->
+isme navigation ejs ka code har file mai use hoga.issliye like nav system.usko alag file mai likh sakte hai aur phir har file mai include kar sakte hai
+<!---------inclue aise karte hai--------------->
+<%- include('./partials/nav.ejs')%>
+
+
+
+<!-- const path=require('path');
+app.set('view engine', 'ejs');
+app.get('/new', (req, res) => {
+//dirname views ka matlab folder ka name or new ka matlab file ka name ayega.path require karna imp h.
+res.render(path.join(__dirname, 'views', 'new')); // Assuming new.ejs is located in the public folder
+}); -->
