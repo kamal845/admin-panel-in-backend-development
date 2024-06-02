@@ -1,10 +1,11 @@
 const mongoose=require('mongoose');
-const connectionURL="mongodb://localhost:27017/admin-panel";
+require('dotenv').config(); // Load environment variables
+const connectionURL = process.env.MONGODB_URL;
 const databaseConnect= async()=>{
     try {
-        mongoose.connect(connectionURL),{
-            useNewUrlParser:true,
-            useUnifiedTopology:true
+       await mongoose.connect(connectionURL),{
+            // useNewUrlParser:true,
+            // useUnifiedTopology:true
             };
             console.log("database is connected");
     } catch (error) {
