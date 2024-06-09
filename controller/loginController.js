@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const loginModel = require('../model/loginModel');
+const signupModel=require('../model/signupModel');
 
 module.exports = {
     login: async (req, res) => {
