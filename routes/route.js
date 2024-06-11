@@ -34,13 +34,21 @@ router.get('/error',(req,res)=>{
 router.get('/faq',(req,res)=>{
     res.render('faq');
 });
-router.get('/profile', (req, res) => {
-    res.render('profile', { activeTab: 'overview' });
-});
-router.get('/profile/edit', (req, res) => {
-    res.render('profile', { activeTab: 'edit' });
+router.get('/profile',(req,res)=>{
+    res.render('profile');
 });
 
-router.post('/profile/update', profileController.updateprofile);
+// router.get('/profile/:id', profileController.getProfile);
+// router.get('/createProfile', profileController.getCreateProfilePage);
+// router.post('/createProfile', profileController.createProfile);
+// router.post('/profile/:id/update', profileController.updateProfile);
+// router.get('/profile', profileController.getProfileAll);
+
+
+router.get('/profile', profileController.getProfileAll); // if you want a list of profiles
+router.get('/profile/:id', profileController.getProfile);
+router.get('/createProfile', profileController.getCreateProfilePage);
+router.post('/createProfile', profileController.createProfile);
+router.post('/profile/:id/update', profileController.updateProfile);
 
 module.exports=router;
