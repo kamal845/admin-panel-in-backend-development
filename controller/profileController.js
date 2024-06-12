@@ -57,27 +57,7 @@
 //         }
 //     },
 
-//     updateProfile: async (req, res) => {
-//         const { Fullname, About, Company, Job, Country, Address, Phone, Email } = req.body;
-//         const profileFields = { Fullname, About, Company, Job, Country, Address, Phone, Email };
-
-//         try {
-//             let profile = await profileModel.findById(req.params.id);
-//             if (!profile) {
-//                 return res.status(404).json({
-//                     status: 'error',
-//                     message: 'Profile not found'
-//                 });
-//             }
-//             profile = await profileModel.findByIdAndUpdate(req.params.id, { $set: profileFields }, { new: true });
-//             res.redirect(`/profile/${req.params.id}`);
-//         } catch (error) {
-//             res.status(500).json({
-//                 status: 'error',
-//                 message: 'Internal Server Error'
-//             });
-//         }
-//     }
+    
 // };
 
 // module.exports = profileController;
@@ -179,6 +159,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 module.exports = {
+
   getProfileAll: async (req, res) => {
     try {
         // Fetch all profiles or any default profile
@@ -226,28 +207,46 @@ module.exports = {
     res.render('createProfile');
   },
 
-  createProfile: async (req, res) => {
-    try {
-      const profile = new profileModel(req.body);
-      await profile.save();
-      res.redirect(`/profile/${profile._id}`);
-    } catch (error) {
-      res.status(500).json({
-        status: 'error',
-        message: 'Internal Server Error'
-      });
-    }
-  },
+//   createProfile: async (req, res) => {
+//     try {
+//       const profile = new profileModel(req.body);
+//       await profile.save();
+//       res.redirect(`/profile/${profile._id}`);
+//     } catch (error) {
+//       res.status(500).json({
+//         status: 'error',
+//         message: 'Internal Server Error'
+//       });
+//     }
+//   },
+    updateProfile: async (req, res) => {
+        const { Fullname, About, Company, Job, Country, Address, Phone, Email } = req.body;
+        const profileFields = { Fullname, About, Company, Job, Country, Address, Phone, Email };
+        console.log("Update profile request received:", req.body); // Log request body
 
-  updateProfile: async (req, res) => {
-    try {
-      const profile = await profileModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      res.redirect(`/profile/${id}`);
-    } catch (error) {
-      res.status(500).json({
-        status: 'error',
-        message: 'Internal Server Error'
-      });
+        try {
+            let profile = await profileModel.findById(req.params.id);
+            console.log("Profile before update:", profile);
+
+            if (!profile) {
+                return res.status(404).json({
+                    status: 'error',
+                    message: 'Profile not found'
+                });
+            }
+            profile = await profileModel.findByIdAndUpdate(req.params.id, { $set: profileFields }, { new: true });
+         
+            console.log("Profile after update:", profile); // Log profile after update
+
+            res.redirect(`/profile/${req.params.id}`);
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            res.status(500).json({
+                status: 'error',
+                message: 'Internal Server Error'
+            });
+        }
     }
-  }
+
+
 };

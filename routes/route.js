@@ -3,6 +3,7 @@ const router=express.Router();
 const loginController=require('../controller/loginController');
 const signupController=require('../controller/signupController');
 const profileController=require('../controller/profileController');
+const contactController=require('../controller/contactController');
 //main page par render ke liye
 router.get('/',(req,res)=>{
     res.render('register');
@@ -34,21 +35,16 @@ router.get('/error',(req,res)=>{
 router.get('/faq',(req,res)=>{
     res.render('faq');
 });
-router.get('/profile',(req,res)=>{
-    res.render('profile');
-});
 
-// router.get('/profile/:id', profileController.getProfile);
-// router.get('/createProfile', profileController.getCreateProfilePage);
-// router.post('/createProfile', profileController.createProfile);
-// router.post('/profile/:id/update', profileController.updateProfile);
-// router.get('/profile', profileController.getProfileAll);
-
-
-router.get('/profile', profileController.getProfileAll); // if you want a list of profiles
+router.get('/profile', profileController.getProfileAll);
 router.get('/profile/:id', profileController.getProfile);
 router.get('/createProfile', profileController.getCreateProfilePage);
-router.post('/createProfile', profileController.createProfile);
+// router.post('/createProfile', profileController.createProfile);
 router.post('/profile/:id/update', profileController.updateProfile);
 
+
+
+//contactform
+
+router.post('/contact', contactController.createContact);
 module.exports=router;
