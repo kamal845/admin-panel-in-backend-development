@@ -4,6 +4,7 @@ const loginController=require('../controller/loginController');
 const signupController=require('../controller/signupController');
 const profileController=require('../controller/profileController');
 const contactController=require('../controller/contactController');
+const logoutController=require('../controller/logoutController');
 //main page par render ke liye
 router.get('/',(req,res)=>{
     res.render('register');
@@ -47,4 +48,8 @@ router.post('/profile/:id/update', profileController.updateProfile);
 //contactform
 
 router.post('/contact', contactController.createContact);
+
+//logout form
+
+
 module.exports=router;
