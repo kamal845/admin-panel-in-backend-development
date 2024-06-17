@@ -56,12 +56,9 @@
 //             });
 //         }
 //     },
-
-    
 // };
 
 // module.exports = profileController;
-const profileModel = require('../model/profileModel');
 // const profileController = {
 //     createProfile: async (req, res) => {
 //         const { Fullname, About, Company, Job, Country, Address, Phone, Email } = req.body;
@@ -157,7 +154,7 @@ const profileModel = require('../model/profileModel');
 
 const express = require('express');
 const mongoose = require('mongoose');
-
+const profileModel = require('../model/profileModel');
 module.exports = {
 
   getProfileAll: async (req, res) => {
@@ -219,34 +216,35 @@ module.exports = {
 //       });
 //     }
 //   },
-    updateProfile: async (req, res) => {
-        const { Fullname, About, Company, Job, Country, Address, Phone, Email } = req.body;
-        const profileFields = { Fullname, About, Company, Job, Country, Address, Phone, Email };
-        console.log("Update profile request received:", req.body); // Log request body
+updateProfile: async (req, res) => {
+  const { Fullname, About, Company, Job, Country, Address, Phone, Email } = req.body;
+  const profileFields = { Fullname, About, Company, Job, Country, Address, Phone, Email };
 
-        try {
-            let profile = await profileModel.findById(req.params.id);
-            console.log("Profile before update:", profile);
+  console.log("Profile update request body:", req.body);
+  
+  try {
+      let profile = await profileModel.findById(req.params.id);
+      if (!profile) {
+          return res.status(404).json({
+              status: 'error',
+              message: 'Profile not found'
+          });
+      }
 
-            if (!profile) {
-                return res.status(404).json({
-                    status: 'error',
-                    message: 'Profile not found'
-                });
-            }
-            profile = await profileModel.findByIdAndUpdate(req.params.id, { $set: profileFields }, { new: true });
-         
-            console.log("Profile after update:", profile); // Log profile after update
+      console.log("Profile found:", profile);
 
-            res.redirect(`/profile/${req.params.id}`);
-        } catch (error) {
-            console.error("Error updating profile:", error);
-            res.status(500).json({
-                status: 'error',
-                message: 'Internal Server Error'
-            });
-        }
-    }
+      profile = await profileModel.findByIdAndUpdate(req.params.id, { $set: profileFields }, { new: true });
+      
+      console.log("Profile after update:", profile);
 
+      res.redirect(`/profile/${req.params.id}`);
+  } catch (error) {
+      console.error("Error updating profile:", error);
+      res.status(500).json({
+          status: 'error',
+          message: 'Internal Server Error'
+      });
+  }
+}
 
 };

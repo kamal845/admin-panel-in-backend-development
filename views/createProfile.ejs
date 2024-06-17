@@ -473,11 +473,11 @@
     </ul>
   </aside>
   <!-- End Sidebar-->
-
   <main id="main" class="main">
     <!-- End Page Title -->
    <!-- createProfile.ejs -->
 <form action="/createProfile" method="POST">
+  <input type="file" name="ProfileImage" accept="image/*">
   <input type="text" name="Fullname" placeholder="Full Name">
   <input type="text" name="About" placeholder="About">
   <input type="text" name="Company" placeholder="Company">
@@ -485,12 +485,11 @@
   <input type="text" name="Country" placeholder="Country">
   <input type="text" name="Address" placeholder="Address">
   <input type="text" name="Phone" placeholder="Phone">
-  <input type="email" name="Email" placeholder="Email">
+  <input type="email"name="Email" placeholder="Email">
   <button type="submit">Create Profile</button>
 </form>
 
-  
-   
+
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->

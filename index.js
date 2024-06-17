@@ -1,8 +1,10 @@
 const express=require('express');
 const app= express();
 const path = require('path');
-const connectionURL=require('./database/database');
+const cookieParser = require('cookie-parser');
 const routes=require('./routes/route');
+const connectionURL=require('./database/database');
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require('dotenv').config();
