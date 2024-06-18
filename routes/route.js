@@ -6,7 +6,7 @@ const profileController=require('../controller/profileController');
 const contactController=require('../controller/contactController');
 const logoutController=require('../controller/logoutController');
 const tableXController=require('../controller/tableXController');
-
+const paymentController=require('../controller/paymentController');
 //main page par render ke liye
 router.get('/',(req,res)=>{
     res.render('register');
@@ -55,14 +55,6 @@ router.post('/contact', contactController.createContact);
 router.get('/logout', logoutController.logout);
 //TableX
 
-// router.get('/tableX', tableXController.renderHome);
-// router.get('/tableX/home', tableXController.getHomeData);
-// router.post('/tableX/home', tableXController.createTable);
-// router.get('/tableX/create', tableXController.renderCreate);
-// router.get('/tableX/create/', tableXController.redirectHome);
-// router.get('/tableX/edit/:id', tableXController.renderEditPage);
-// router.post('/tableX/update/:id', tableXController.updateTable);
-// router.post('/tableX/delete/:id', tableXController.deleteTable);
 
 router.get('/tableX', tableXController.renderHome);
 router.get('/tableX/home', tableXController.renderHome);
@@ -74,8 +66,10 @@ router.post('/tableX/delete/:id', tableXController.deleteTable);
 router.get('/tableX/search', tableXController.searchTables);
 module.exports=router;
 
-
-
-
+//payment
+router.get('/paymentbuy', paymentController.renderBuyPage);
+router.post('/paymentbuy', paymentController.payment);
+router.get('/success', paymentController.success);
+router.get('/failure', paymentController.failure);
 // router.post('/profile/:id/update', profileController.updateProfile);
 // router.post('/profile/:id/deleteImage', profileController.deleteProfileImage);
