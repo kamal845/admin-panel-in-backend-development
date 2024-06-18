@@ -12,10 +12,6 @@ Age:{
     type:Number,
     required:true
 },
-image:{
-    type:String,
-    required:true
-},
 school:{
     type:String,
     required:true
