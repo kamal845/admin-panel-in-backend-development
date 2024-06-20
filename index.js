@@ -28,3 +28,4 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'assets')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

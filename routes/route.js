@@ -66,7 +66,8 @@ router.get('/profile/:id', profileController.getProfile);
 router.get('/createProfile', profileController.getCreateProfilePage);
 // router.post('/createProfile', profileController.createProfile);
 router.post('/profile/:id/update', profileController.updateProfile);
-
+router.post('/profile/:id/uploadImage', profileController.uploadProfileImage);
+router.post('/profile/:id/deleteImage', profileController.deleteProfileImage);
 
 
 //contactform
@@ -93,6 +94,4 @@ router.get('/paymentbuy', paymentController.renderBuyPage);
 router.post('/paymentbuy', paymentController.payment);
 router.get('/success', paymentController.success);
 router.get('/failure', paymentController.failure);
-// router.post('/profile/:id/update', profileController.updateProfile);
-// router.post('/profile/:id/deleteImage', profileController.deleteProfileImage);
 module.exports=router;

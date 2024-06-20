@@ -1,6 +1,27 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const multer=require('multer');
 const profileModel = require('../model/profileModel');
+const path=require('path');
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '../uploads/')); // Adjust the path as per your project structure
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  // Accept images only
+  if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+    return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
+};
+
+const upload = multer({ storage: storage, fileFilter: fileFilter }).single('Profileimage');
+
 module.exports = {
 
   getProfileAll: async (req, res) => {
@@ -79,14 +100,48 @@ module.exports = {
       });
   }
 },
-createProfileImage: async(req,res)=>{
+uploadProfileImage: async (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      console.error('Upload error:', err.message);
+      return res.status(400).send({ message: err.message });
+    }
 
+    console.log('Uploaded file:', req.file); // डिबगिंग के लिए लॉगिंग
+
+    try {
+      const profile = await profileModel.findById(req.params.id);
+      if (!profile) {
+        return res.status(404).send({ message: 'Profile not found' });
+      }
+
+      if (!req.file || !req.file.path) {
+        return res.status(400).send({ message: 'Uploaded file not found or invalid' });
+      }
+
+      const relativePath = `/uploads/${req.file.filename}`; // केवल रिलेवेंट पाथ स्टोर करें
+      profile.Profileimage = relativePath;
+      await profile.save();
+      res.redirect(`/profile/${profile._id}`);
+    } catch (error) {
+      console.error('Database error:', error.message); // डिबगिंग के लिए लॉगिंग
+      res.status(500).send({ message: error.message });
+    }
+  });
 },
-updateProfileImage: async(req,res)=>{
 
-},
-deleteProfileImage: async(req,res)=>{
+deleteProfileImage: async (req, res) => {
+  try {
+    const profile = await profileModel.findById(req.params.id); // Corrected the model name
+    if (!profile) {
+      return res.status(404).send({ message: 'Profile not found' });
+    }
 
-},
-
+    profile.Profileimage = null; // Or you can use a default image path
+    await profile.save();
+    res.redirect(`/profile/${profile._id}`); // Redirect to the profile page of the updated profile
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+}
 };
