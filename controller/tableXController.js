@@ -1,16 +1,35 @@
 const TableX = require('../model/tableXModel');
 
-// Render home page with tables
 exports.renderHome = async (req, res) => {
+    const perPage = 5; // प्रति पृष्ठ आइटमों की संख्या
+    const page = parseInt(req.query.page) || 1;
+    let searchQuery = req.query.search || ''; 
+    const searchType = req.query.type || 'name';
     try {
-        const tables = await TableX.find();
-        res.render('tableX', { tables });
+        const query = searchQuery !== ''
+            ? { name: { $regex: new RegExp(searchQuery, 'i') } } 
+            : {};
+
+        const totalItems = await TableX.countDocuments(query);
+        const totalPages = Math.ceil(totalItems / perPage);
+
+        const tables = await TableX.find(query)
+            .skip((page - 1) * perPage)
+            .limit(perPage);
+
+        res.render('tableX', {
+            tables,
+            currentPage: page,
+            totalPages,
+            perPage,
+            totalItems,
+            searchQuery,
+            searchType
+        });
     } catch (error) {
-        console.log('Error fetching data:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send('internal server error');
     }
 };
-
 // Render create page
 exports.renderCreate = (req, res) => {
     res.render('tableXcreate');
@@ -76,27 +95,41 @@ exports.deleteTable = async (req, res) => {
     }
 };
 exports.searchTables = async (req, res) => {
-    const { query, type } = req.query; // 'type' can be 'name' or 'age'
-
-    let matchStage = {};
-
-    if (type === 'name') {
-        matchStage = {
-            name: { $regex: query, $options: 'i' }
-        };
-    } else if (type === 'age') {
-        matchStage = {
-            Age: parseInt(query, 10)
-        };
-    }
-
+    const perPage = 5;
+    const page = parseInt(req.query.page) || 1;
+    let searchQuery = req.query.search || ''; 
+    const searchType = req.query.type || 'name'; 
     try {
-        const tables = await TableX.aggregate([
-            { $match: matchStage }
-        ]);
-        res.render('tableX', { tables });
+        let query = {};
+
+        if (searchQuery && typeof searchQuery === 'string') {
+            if (searchType === 'name') {
+                query = { name: { $regex: new RegExp(searchQuery, 'i') } };
+            } else if (searchType === 'age') {
+                const age = parseInt(searchQuery);
+                if (!isNaN(age)) {
+                    query = { Age: age }; 
+                }
+            }
+        }
+
+        const totalItems = await TableX.countDocuments(query);
+        const totalPages = Math.ceil(totalItems / perPage);
+
+        const tables = await TableX.find(query)
+            .skip((page - 1) * perPage)
+            .limit(perPage);
+
+        res.render('tableX', {
+            tables,
+            currentPage: page,
+            totalPages,
+            perPage,
+            totalItems,
+            searchQuery,
+            searchType
+        });
     } catch (error) {
-        console.log('Error fetching data:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send('internal server error');
     }
 };
